@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SIH25004 - Cattle & Buffalo Breed Identification</title>
+    <link href="https://cdn.jsdelivr.net/style.css" rel="stylesheet">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 40px; }
+        .card { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; }
+        .btn { background: #27ae60; color: white; border: none; padding: 12px 20px; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .btn:hover { background: #219150; }
+        input[type=file] { margin: 20px 0; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🐄 Indian Livestock Breed Identification System</h2>
+        <p style="text-align: center; color: #7f8c8d;">SIH25004 Digital Registration Platform</p>
+        <hr><br>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <label><strong>Select Animal Image (Buffalo / Cattle):</strong></label>
+            <input type="file" name="file" accept="image/*" required>
+            <button type="submit" class="btn">Analyze & Identify Breed</button>
+        </form>
+    </div>
+</body>
+</html>

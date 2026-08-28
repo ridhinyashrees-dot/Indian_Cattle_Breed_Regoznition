@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Breed Result - {{ predicted_breed }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f3; margin: 30px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; }
+        .header { display: flex; align-items: center; justify-content: space-between; }
+        .badge { background: #2980b9; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #34495e; color: white; }
+        .form-group { margin-bottom: 12px; }
+        .form-group input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-reg { background: #8e44ad; color: white; padding: 10px; border: none; width: 100%; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>Predicted Breed: <span style="color:#27ae60;">{{ predicted_breed }}</span></h2>
+            <span class="badge">Confidence: {{ confidence }}%</span>
+        </div>
+        
+        <div style="text-align: center; margin: 15px 0;">
+            <img src="{{ image_path }}" width="250" style="border-radius:8px; border:2px solid #ccc;">
+        </div>
+
+        <h3>Breed Profile Information</h3>
+        {% if breed_info %}
+        <table>
+            <tr><th>Native Region</th><td>{{ breed_info.native_region }}</td></tr>
+            <tr><th>Coat Colour</th><td>{{ breed_info.coat_colour }}</td></tr>
+            <tr><th>Horn Type</th><td>{{ breed_info.horn_type }}</td></tr>
+            <tr><th>Milk Yield (per lactation)</th><td>{{ breed_info.milk_yield_per_lactation_kg }} kg</td></tr>
+            <tr><th>Fat Percentage</th><td>{{ breed_info.fat_percentage }}</td></tr>
+            <tr><th>Feeding Advice</th><td>{{ breed_info.feeding_advice }}</td></tr>
+        </table>
+        {% endif %}
+
+        <h3>Recommended Vaccination Schedule</h3>
+        <table>
+            <tr><th>Disease</th><th>Vaccine</th><th>Frequency</th></tr>
+            {% for v in vaccinations %}
+            <tr><td>{{ v.disease }}</td><td>{{ v.vaccine }}</td><td>{{ v.frequency }}</td></tr>
+            {% endfor %}
+        </table>
+
+        <hr>
+        <h3>Register Animal Profile</h3>
+        <form action="/register" method="post">
+            <input type="hidden" name="predicted_breed" value="{{ predicted_breed }}">
+            <input type="hidden" name="confidence" value="{{ confidence }}">
+            <input type="hidden" name="image_path" value="{{ image_path }}">
+            
+            <div class="form-group">
+                <input type="text" name="owner_name" placeholder="Owner Full Name" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="mobile_number" placeholder="Mobile Number" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="village" placeholder="Village / District Name" required>
+            </div>
+            <button type="submit" class="btn-reg">Complete Digital Registration</button>
+        </form>
+    </div>
+</body>
+</html>
