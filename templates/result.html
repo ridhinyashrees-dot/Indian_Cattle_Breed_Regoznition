@@ -1,71 +1,110 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Breed Result - {{ predicted_breed }}</title>
+    <title>{{ t.breed_profile }} - {{ predicted_breed }}</title>
     <style>
         body { font-family: Arial, sans-serif; background: #eef2f3; margin: 30px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .header { display: flex; align-items: center; justify-content: space-between; }
         .badge { background: #2980b9; color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #34495e; color: white; }
-        .form-group { margin-bottom: 12px; }
-        .form-group input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-reg { background: #8e44ad; color: white; padding: 10px; border: none; width: 100%; border-radius: 5px; cursor: pointer; }
+        .form-group { margin-bottom: 15px; }
+        .form-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn { background: #27ae60; color: white; padding: 12px; border: none; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .btn:hover { background: #219150; }
+        .doc-card { background: #eef2f7; border-left: 5px solid #8e44ad; padding: 15px; border-radius: 8px; margin-top: 15px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h2>Predicted Breed: <span style="color:#27ae60;">{{ predicted_breed }}</span></h2>
-            <span class="badge">Confidence: {{ confidence }}%</span>
+            <h2>{{ t.predicted_breed_label }}: <span style="color:#27ae60;">{{ predicted_breed }}</span></h2>
+            <span class="badge">{{ t.confidence }}: {{ confidence }}%</span>
         </div>
         
         <div style="text-align: center; margin: 15px 0;">
             <img src="{{ image_path }}" width="250" style="border-radius:8px; border:2px solid #ccc;">
         </div>
 
-        <h3>Breed Profile Information</h3>
+        <h3>{{ t.breed_profile }}</h3>
         {% if breed_info %}
         <table>
-            <tr><th>Native Region</th><td>{{ breed_info.native_region }}</td></tr>
-            <tr><th>Coat Colour</th><td>{{ breed_info.coat_colour }}</td></tr>
-            <tr><th>Horn Type</th><td>{{ breed_info.horn_type }}</td></tr>
-            <tr><th>Milk Yield (per lactation)</th><td>{{ breed_info.milk_yield_per_lactation_kg }} kg</td></tr>
-            <tr><th>Fat Percentage</th><td>{{ breed_info.fat_percentage }}</td></tr>
-            <tr><th>Feeding Advice</th><td>{{ breed_info.feeding_advice }}</td></tr>
+            <tr><th>{{ t.native_region }}</th><td>{{ breed_info.native_region }}</td></tr>
+            <tr><th>{{ t.coat_colour }}</th><td>{{ breed_info.coat_colour }}</td></tr>
+            <tr><th>{{ t.horn_type }}</th><td>{{ breed_info.horn_type }}</td></tr>
+            <tr><th>{{ t.milk_yield }}</th><td>{{ breed_info.milk_yield_per_lactation_kg }} kg</td></tr>
+            <tr><th>{{ t.fat_percentage }}</th><td>{{ breed_info.fat_percentage }}</td></tr>
+            <tr><th>{{ t.feeding_advice }}</th><td>{{ breed_info.feeding_advice }}</td></tr>
         </table>
         {% endif %}
 
-        <h3>Recommended Vaccination Schedule</h3>
+        <!-- 👨‍⚕️ All Doctors Treatment History Timeline -->
+        <div style="margin-top: 25px;">
+            <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 5px;">🏥 {{ t.medical_history }}</h3>
+            
+            {% if medical_history %}
+                {% for report in medical_history %}
+                <div class="doc-card">
+                    <h4 style="margin-top: 0; color: #2c3e50;">👨‍⚕️ Dr. {{ report.doctor_name }} 
+                        <span style="font-size: 12px; color: #666; font-weight: normal; float: right;">({{ t.updated_on }}: {{ report.updated_at }})</span>
+                    </h4>
+                    <p style="margin: 5px 0;"><strong>{{ t.contact_number }}:</strong> {{ report.doctor_phone }}</p>
+                    <p style="margin: 5px 0;"><strong>{{ t.medical_notes }}:</strong> {{ report.medical_notes }}</p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color: #666; font-style: italic; background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 10px;">{{ t.no_history }}</p>
+            {% endif %}
+        </div>
+
+        <h3>{{ t.vaccination_schedule }}</h3>
         <table>
-            <tr><th>Disease</th><th>Vaccine</th><th>Frequency</th></tr>
+            <tr><th>{{ t.disease }}</th><th>{{ t.vaccine }}</th><th>{{ t.frequency }}</th></tr>
             {% for v in vaccinations %}
             <tr><td>{{ v.disease }}</td><td>{{ v.vaccine }}</td><td>{{ v.frequency }}</td></tr>
             {% endfor %}
         </table>
 
-        <hr>
-        <h3>Register Animal Profile</h3>
-        <form action="/register" method="post">
-            <input type="hidden" name="predicted_breed" value="{{ predicted_breed }}">
-            <input type="hidden" name="confidence" value="{{ confidence }}">
-            <input type="hidden" name="image_path" value="{{ image_path }}">
-            
-            <div class="form-group">
-                <input type="text" name="owner_name" placeholder="Owner Full Name" required>
-            </div>
-            <div class="form-group">
-                <input type="text" name="mobile_number" placeholder="Mobile Number" required>
-            </div>
-            <div class="form-group">
-                <input type="text" name="village" placeholder="Village / District Name" required>
-            </div>
-            <button type="submit" class="btn-reg">Complete Digital Registration</button>
-        </form>
+        <hr style="margin: 25px 0;">
+        
+        <h3>{{ t.register_title }}</h3>
+        <!-- Register Form inside result.html -->
+        <!-- Animal Registration Form -->
+<form action="/register" method="POST" class="bg-white shadow-md rounded-xl p-6 mt-6 space-y-4 border border-gray-100">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">🌾 Register Animal to Portal</h3>
+    
+    <!-- Hidden fields to pass prediction data -->
+    <input type="hidden" name="predicted_breed" value="{{ predicted_breed }}">
+    <input type="hidden" name="confidence" value="{{ confidence }}">
+    <input type="hidden" name="image_path" value="{{ image_path }}">
+
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Custom Tag ID (Optional):</label>
+        <input type="text" name="custom_tag_id" placeholder="e.g. RAM-001 or VIL-102" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Owner Name:</label>
+        <input type="text" name="owner_name" required placeholder="Enter owner name" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Mobile Number:</label>
+        <input type="tel" name="mobile_number" required placeholder="Enter 10-digit mobile number" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+    </div>
+
+    <div>
+        <label class="block text-sm font-semibold text-gray-700 mb-1">Village / Location:</label>
+        <input type="text" name="village" required placeholder="Enter village name" class="w-full border border-gray-300 rounded-lg p-2.5 text-sm">
+    </div>
+
+    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md cursor-pointer">
+        Register Animal
+    </button>
+</form>
     </div>
 </body>
 </html>

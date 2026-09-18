@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Farmer Dashboard - Registered Animals</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f3; margin: 30px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; }
+        .search-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+        .search-box input { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; }
+        .search-box button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .search-box button:hover { background: #2980b9; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #34495e; color: white; }
+        .btn-history { background: #8e44ad; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; font-size: 14px; }
+        .btn-history:hover { background: #732d91; }
+        .back-link { display: inline-block; margin-bottom: 15px; color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">&larr; Back to Home</a>
+        <h2>🌾 Farmer Dashboard - My Registered Animals</h2>
+        
+        <div class="search-box">
+            <form action="/farmer_history" method="POST">
+                <label><strong>Enter Your Mobile Number:</strong> </label>
+                <input type="text" name="mobile_number" value="{{ mobile_number or '' }}" required placeholder="Mobile Number">
+                <button type="submit">View My Animals</button>
+            </form>
+        </div>
+
+        {% if mobile_number %}
+            <h3>Animals Registered Under: {{ mobile_number }}</h3>
+            {% if registered_animals %}
+            <table>
+                <tr>
+                    <th>Tag ID</th>
+                    <th>Owner Name</th>
+                    <th>Village</th>
+                    <th>Predicted Breed</th>
+                    <th>Confidence</th>
+                    <th>Action</th>
+                </tr>
+                {% for animal in registered_animals %}
+                <tr>
+                    <td><strong>{{ animal.registration_tag }}</strong></td>
+                    <td>{{ animal.owner_name }}</td>
+                    <td>{{ animal.village }}</td>
+                    <td style="color: #27ae60; font-weight: bold;">{{ animal.predicted_breed }}</td>
+                    <td>{{ animal.prediction_confidence }}%</td>
+                    <td>
+                        <a href="/breed_medical_history/{{ animal.predicted_breed }}" class="btn-history">📋 View Medical History</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+            <p style="text-align: center; color: #666; font-style: italic;">No animals found registered with this mobile number.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+</body>
+</html>

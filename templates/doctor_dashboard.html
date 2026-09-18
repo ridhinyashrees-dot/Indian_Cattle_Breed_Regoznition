@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor & Animal Portal - SIH2026</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; margin: 30px; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #2c3e50; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #34495e; }
+        select, input[type="text"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        textarea { height: 100px; resize: vertical; }
+        .btn { background: #27ae60; color: white; border: none; padding: 12px 20px; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .btn:hover { background: #219150; }
+        .btn-search { background: #2980b9; width: auto; padding: 10px 20px; display: inline-block; }
+        .btn-search:hover { background: #1f618d; }
+        .logout { text-align: right; margin-bottom: 20px; }
+        .logout a { background: #e74c3c; color: white; padding: 8px 15px; border-radius: 4px; text-decoration: none; font-size: 14px; }
+        .flash-msg { background: #d4edda; color: #155724; padding: 10px; border-radius: 6px; margin-bottom: 20px; text-align: center; }
+        .animal-card { background: #eef9f2; border-left: 5px solid #27ae60; padding: 20px; border-radius: 8px; margin-bottom: 25px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logout">
+            <a href="/">Logout / Home</a>
+        </div>
+        <h2>🏥 Veterinarian & Animal Health Dashboard</h2>
+        <hr style="margin-bottom: 20px;">
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-msg">{{ messages[0] }}</div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- 🔍 Search Animal by Registration Tag ID -->
+        <div style="background: #f1f4f6; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <label><strong>🔍 Enter Farmer's Animal Registration ID (e.g., REG-2026-XXXXXX):</strong></label>
+            <form action="/doctor_dashboard" method="GET" style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" name="search_tag" value="{{ search_tag or '' }}" placeholder="Enter Tag ID here..." required>
+                <button type="submit" class="btn btn-search">Fetch Details</button>
+            </form>
+        </div>
+
+        {% if animal_details %}
+        <!-- 📋 Display Searched Animal & Breed Information -->
+        <div class="animal-card">
+            <h3 style="color: #27ae60; margin-top: 0;">🐄 Found Animal Profile</h3>
+            <div class="grid">
+                <div>
+                    <p><strong>Tag ID:</strong> {{ animal_details.registration_tag }}</p>
+                    <p><strong>Owner Name:</strong> {{ animal_details.owner_name }}</p>
+                    <p><strong>Mobile:</strong> {{ animal_details.mobile_number }}</p>
+                </div>
+                <div>
+                    <p><strong>Village:</strong> {{ animal_details.village }}</p>
+                    <p><strong>Identified Breed:</strong> <span style="color: #d35400; font-weight: bold;">{{ animal_details.predicted_breed }}</span></p>
+                    <p><strong>AI Confidence:</strong> {{ animal_details.prediction_confidence }}%</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- 📝 Update Medical Notes Section -->
+        <form action="/doctor_dashboard" method="POST">
+            <div class="form-group">
+                <label>Select Breed to Update Medical Guidelines:</label>
+                <select name="breed_name" required>
+                    <option value="" disabled selected>-- Choose Breed --</option>
+                    {% for breed in breeds %}
+                        <option value="{{ breed.breed_name }}">{{ breed.breed_name }} (Region: {{ breed.native_region }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Medical Notes & Treatment Guidelines for Farmers:</label>
+                <textarea name="medical_notes" placeholder="Enter special health care, vaccination schedules, or disease management tips..." required></textarea>
+            </div>
+
+            <button type="submit" class="btn">Save Medical Notes to Database</button>
+        </form>
+    </div>
+</body>
+</html>

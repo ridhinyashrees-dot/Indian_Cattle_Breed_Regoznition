@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Doctor Login - SIH2026</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #2c3e50; text-align: center; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; color: #34495e; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .btn { background: #8e44ad; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        .btn:hover { background: #732d91; }
+        .back-link { text-align: center; margin-top: 15px; }
+        .back-link a { color: #27ae60; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h2>👨‍⚕️ Veterinarian Login</h2>
+        <form action="/doctor_login" method="POST">
+            <div class="form-group">
+                <label>Doctor Name:</label>
+                <input type="text" name="doctor_name" required placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label>Phone Number:</label>
+                <input type="text" name="doctor_phone" required placeholder="Enter mobile number">
+            </div>
+            <div class="form-group">
+                <label>Password (Any password):</label>
+                <input type="password" name="password" required placeholder="Enter password">
+            </div>
+            <button type="submit" class="btn">Login & Proceed</button>
+        </form>
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -7,7 +7,7 @@ import mysql.connector
 DB_CONFIG = {
     'host': 'localhost',
     'user': 'root',
-    'password': 'Ridhinya@2008',  # Put your MySQL root password here
+    'password': 'poornima@2008',  # Put your MySQL root password here
 }
 
 CSV_FILE = os.path.join("data", "breed_information.csv")
