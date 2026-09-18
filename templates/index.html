@@ -3,97 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ t.title if t and t.title else 'SIH25004 - Cattle & Buffalo Breed Identification' }}</title>
-    <!-- Tailwind CSS CDN for beautiful modern styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{{ t.title if t and t.title else 'SIH25004 — Cattle & Buffalo Breed Identification' }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .tab-section { margin-top: 20px; padding: 15px; border: 1px dashed #cbd5e1; border-radius: 12px; background-color: #f8fafc; }
-        video, canvas { width: 100%; border-radius: 8px; display: none; margin-top: 10px; }
+        :root{
+            --clay:      #a3552f;
+            --clay-dark: #7c3f22;
+            --turmeric:  #c9932e;
+            --field:     #29423a;
+            --field-dark:#1b2e28;
+            --cream:     #f3ede0;
+            --paper:     #fbf8f1;
+            --ink:       #23201a;
+            --line:      #ddd3bd;
+        }
+        *{ box-sizing:border-box; }
+        html{ scroll-behavior:smooth; }
+        body{
+            margin:0;
+            background:var(--paper);
+            color:var(--ink);
+            font-family:'Karla', -apple-system, sans-serif;
+            display:flex; flex-direction:column; min-height:100vh;
+        }
+        h1,h2,h3{ font-family:'Fraunces', Georgia, serif; margin:0; }
+        a{ color:inherit; }
+
+        /* ---------- Header ---------- */
+        header{
+            background:var(--field-dark);
+            color:var(--cream);
+            padding:18px 28px;
+            display:flex; flex-wrap:wrap; gap:16px;
+            justify-content:space-between; align-items:center;
+            border-bottom:3px solid var(--turmeric);
+        }
+        .brand{ display:flex; align-items:center; gap:10px; }
+        .brand-mark{
+            width:34px; height:34px; border-radius:50%;
+            background:var(--turmeric); color:var(--field-dark);
+            display:flex; align-items:center; justify-content:center;
+            font-family:'Fraunces', serif; font-weight:700; font-size:16px;
+        }
+        .brand-text{ font-family:'Fraunces', serif; font-weight:600; font-size:16px; letter-spacing:.01em; }
+        .brand-text small{ display:block; font-family:'Karla',sans-serif; font-weight:400; font-size:11px; color:#b9c4bd; letter-spacing:.04em; }
+
+        nav.links{ display:flex; align-items:center; gap:22px; font-size:14px; }
+        nav.links a{ text-decoration:none; color:#d8dfd9; padding-bottom:2px; border-bottom:1px solid transparent; transition:border-color .15s, color .15s; }
+        nav.links a:hover{ color:var(--cream); border-color:var(--turmeric); }
+
+        .lang{ display:flex; align-items:center; gap:8px; background:rgba(255,255,255,.06); padding:7px 12px; border-radius:6px; font-size:13px; }
+        .lang a{ text-decoration:none; color:#b9c4bd; padding:0 2px; }
+        .lang a.active{ color:var(--turmeric); font-weight:700; }
+        .lang span.sep{ color:#4c5c54; }
+
+        /* ---------- Hero ---------- */
+        .hero{
+            background:
+              linear-gradient(120deg, rgba(27,46,40,.94) 0%, rgba(27,46,40,.78) 46%, rgba(27,46,40,.4) 100%),
+              url('https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=1920&q=80');
+            background-size:cover;
+            background-position:center;
+            color:var(--cream);
+            padding:76px 28px 88px;
+        }
+        .hero-inner{
+            max-width:1120px; margin:0 auto;
+            display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:start;
+        }
+        .eyebrow{ font-size:14px; color:var(--turmeric); font-weight:600; margin-bottom:14px; }
+        .hero h1{
+            font-size:clamp(2.4rem, 4.4vw, 3.4rem);
+            font-weight:600; line-height:1.06; letter-spacing:-.01em;
+            max-width:11.5ch;
+        }
+        .hero p.lead{
+            margin-top:20px; font-size:17px; line-height:1.6; color:#dfe6e1;
+            max-width:46ch;
+        }
+        .hero-stats{ display:flex; gap:32px; margin-top:38px; flex-wrap:wrap; }
+        .hero-stats div b{ display:block; font-family:'Fraunces',serif; font-size:26px; color:var(--turmeric); font-weight:600; }
+        .hero-stats div span{ font-size:12.5px; color:#b9c4bd; }
+
+        /* Upload panel */
+        .panel{
+            background:var(--paper); color:var(--ink);
+            border-radius:4px; padding:30px;
+            box-shadow:0 22px 50px rgba(0,0,0,.35);
+            border-top:4px solid var(--clay);
+        }
+        .panel h3{ font-size:19px; font-weight:600; margin-bottom:6px; }
+        .panel .sub{ font-size:13px; color:#6b6455; margin-bottom:20px; }
+        .flash{ margin-bottom:16px; padding:10px 14px; background:#f5d9d0; border:1px solid var(--clay); color:var(--clay-dark); border-radius:4px; font-size:13.5px; font-weight:600; }
+
+        .field-label{ font-size:13px; font-weight:600; color:var(--field); margin-bottom:8px; display:block; }
+        input[type=file]{
+            display:block; width:100%; font-size:13px; color:#544d3f;
+            background:var(--cream); border:1px solid var(--line); border-radius:4px; padding:10px;
+        }
+        input[type=file]::file-selector-button{
+            margin-right:12px; padding:8px 14px; border-radius:3px; border:0;
+            background:var(--field); color:var(--cream); font-weight:600; font-size:12.5px; cursor:pointer;
+        }
+
+        .btn{
+            width:100%; border:0; border-radius:3px; padding:14px 18px;
+            font-weight:700; font-size:14.5px; cursor:pointer;
+            letter-spacing:.01em;
+            transition:transform .12s ease, box-shadow .12s ease;
+        }
+        .btn:hover{ transform:translateY(-1px); }
+        .btn-primary{ background:var(--clay); color:var(--paper); margin-top:16px; }
+        .btn-primary:hover{ box-shadow:0 8px 18px rgba(163,85,47,.35); }
+        .btn-camera{ background:var(--field); color:var(--cream); }
+        .btn-camera:hover{ box-shadow:0 8px 18px rgba(41,66,58,.3); }
+        .btn-capture{ background:var(--turmeric); color:var(--field-dark); margin-top:12px; }
+
+        .divider{ display:flex; align-items:center; gap:14px; margin:22px 0; }
+        .divider .rule{ flex:1; height:1px; background:var(--line); }
+        .divider span{ font-size:11px; letter-spacing:.08em; color:#a39b87; }
+
+        video, canvas{ width:100%; border-radius:4px; display:none; margin-top:12px; }
+
+        /* ---------- Features ---------- */
+        .features{ max-width:1120px; margin:0 auto; padding:80px 28px 90px; width:100%; }
+        .features-head{ max-width:60ch; margin-bottom:44px; }
+        .features-head .eyebrow{ color:var(--clay); }
+        .features-head h2{ font-size:clamp(1.7rem,3vw,2.2rem); font-weight:600; color:var(--field-dark); }
+
+        .feature-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:0; border-top:1px solid var(--line); }
+        .feature{ padding:30px 26px 30px 0; border-bottom:1px solid var(--line); }
+        .feature:not(:last-child){ border-right:1px solid var(--line); padding-right:26px; }
+        .feature:nth-child(n+2){ padding-left:26px; }
+        .feature .mark{ font-family:'Fraunces',serif; font-size:15px; font-weight:600; color:var(--clay); margin-bottom:14px; }
+        .feature h3{ font-size:18px; font-weight:600; margin-bottom:10px; color:var(--field-dark); }
+        .feature p{ font-size:14px; line-height:1.6; color:#5b5748; margin:0; }
+
+        footer{
+            background:var(--field-dark); color:#9aa79f;
+            text-align:center; padding:22px; font-size:12.5px;
+            border-top:3px solid var(--turmeric); margin-top:auto;
+        }
+
+        @media (max-width: 860px){
+            .hero-inner{ grid-template-columns:1fr; }
+            .feature-grid{ grid-template-columns:1fr; }
+            .feature, .feature:not(:last-child){ border-right:none; padding-left:0 !important; padding-right:0 !important; }
+            nav.links{ display:none; }
+        }
+        @media (prefers-reduced-motion: reduce){ .btn{ transition:none; } }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4">
+<body>
 
-    <!-- Language Selection Bar -->
-    <div class="mb-6 bg-white shadow-sm px-6 py-3 rounded-xl border border-gray-100 flex items-center gap-4 text-sm font-semibold">
-        <span class="text-gray-600">Select Language:</span>
-        <a href="/set_lang/en" class="{% if current_lang == 'en' %}text-blue-600 underline font-bold{% else %}text-gray-700 hover:text-blue-500{% endif %}">English</a> |
-        <a href="/set_lang/ta" class="{% if current_lang == 'ta' %}text-green-600 underline font-bold{% else %}text-gray-700 hover:text-green-500{% endif %}">தமிழ்</a> |
-        <a href="/set_lang/hi" class="{% if current_lang == 'hi' %}text-orange-600 underline font-bold{% else %}text-gray-700 hover:text-orange-500{% endif %}">हिंदी</a> |
-        <a href="/set_lang/ml" class="{% if current_lang == 'ml' %}text-purple-600 underline font-bold{% else %}text-gray-700 hover:text-purple-500{% endif %}">മലയാളം</a>
-    </div>
-
-    <!-- Main Card Container -->
-    <div class="bg-white shadow-xl rounded-2xl p-8 max-w-xl w-full border border-gray-100">
-        
-        <!-- Portals Links -->
-        <div class="flex justify-between items-center mb-6">
-            <a href="/farmer_history" class="flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-lg font-medium hover:bg-orange-200 transition text-sm">
-                🌾 {{ t.farmer_portal if t and t.farmer_portal else 'Farmer Portal' }}
-            </a>
-            <a href="/doctor_login" class="flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded-lg font-medium hover:bg-purple-200 transition text-sm">
-                👨‍⚕️ {{ t.doctor_portal if t and t.doctor_portal else 'Doctor Portal' }}
-            </a>
+    <header>
+        <div class="brand">
+            <div class="brand-mark">SIH</div>
+            <div class="brand-text">LIVESTOCK AI<small>Breed identification &amp; registry</small></div>
         </div>
 
-        <!-- Header Title -->
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800 mb-1">🐃 {{ t.title if t and t.title else 'Indian Livestock Breed Identification System' }}</h1>
-            <p class="text-sm text-gray-500">{{ t.subtitle if t and t.subtitle else 'SIH25004 Digital Registration Platform' }}</p>
+        <nav class="links">
+            <a href="/">Home</a>
+            <a href="/farmer_history">Farmer Portal</a>
+            <a href="/doctor_login">Doctor Portal</a>
+        </nav>
+
+        <div class="lang">
+            <a href="/set_lang/en" class="{% if current_lang == 'en' %}active{% endif %}">EN</a><span class="sep">/</span>
+            <a href="/set_lang/ta" class="{% if current_lang == 'ta' %}active{% endif %}">தமிழ்</a><span class="sep">/</span>
+            <a href="/set_lang/hi" class="{% if current_lang == 'hi' %}active{% endif %}">हिंदी</a><span class="sep">/</span>
+            <a href="/set_lang/ml" class="{% if current_lang == 'ml' %}active{% endif %}">മലയാളം</a>
         </div>
+    </header>
 
-        <hr class="mb-6 border-gray-200">
-
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                    {{ messages[0] }}
-                </div>
-            {% endif %}
-        {% endwith %}
-
-        <!-- Option 1: File Upload Form -->
-        <form action="/predict" method="POST" enctype="multipart/form-data" class="space-y-4">
+    <section class="hero">
+        <div class="hero-inner">
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
-                    <strong>{{ t.upload_label if t and t.upload_label else 'Select Animal Image (Upload File):' }}</strong>
-                </label>
-                <input type="file" name="file" accept="image/*" required class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer border border-gray-300 rounded-lg p-2">
+                <div class="eyebrow">Smart India Hackathon · SIH25004</div>
+                <h1>Know the breed standing in front of you</h1>
+                <p class="lead">
+                    {{ t.title if t and t.title else 'Point a camera at a cow or buffalo and get its native Indian breed in seconds — then register it, track its records, and keep its health history in one place.' }}
+                </p>
+                <div class="hero-stats">
+                    <div><b>40+</b><span>Native breeds recognised</span></div>
+                    <div><b>&lt;3s</b><span>Average identification time</span></div>
+                    <div><b>2</b><span>Portals — farmer &amp; veterinary</span></div>
+                </div>
             </div>
 
-            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md cursor-pointer">
-                {{ t.analyze_btn if t and t.analyze_btn else 'Analyze & Identify Breed' }}
-            </button>
-        </form>
+            <div class="panel">
+                <h3>Identify a breed</h3>
+                <p class="sub">Upload a photo or capture one live from your camera.</p>
 
-        <div class="relative flex py-5 items-center">
-            <div class="flex-grow border-t border-gray-300"></div>
-            <span class="flex-shrink mx-4 text-gray-400 text-sm font-semibold">OR</span>
-            <div class="flex-grow border-t border-gray-300"></div>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="flash">{{ messages[0] }}</div>
+                    {% endif %}
+                {% endwith %}
+
+                <form action="/predict" method="POST" enctype="multipart/form-data">
+                    <label class="field-label">{{ t.upload_label if t and t.upload_label else 'Animal photo' }}</label>
+                    <input type="file" name="file" accept="image/*" required>
+                    <button type="submit" class="btn btn-primary">{{ t.analyze_btn if t and t.analyze_btn else 'Analyse & identify breed' }}</button>
+                </form>
+
+                <div class="divider"><div class="rule"></div><span>OR</span><div class="rule"></div></div>
+
+                <button type="button" class="btn btn-camera" id="start-camera">Capture live photo from camera</button>
+                <video id="video" autoplay playsinline></video>
+                <button type="button" class="btn btn-capture" id="click-photo" style="display:none;">Capture &amp; analyse</button>
+                <canvas id="canvas"></canvas>
+
+                <form id="camera-form" action="/predict_camera" method="POST" style="display:none;">
+                    <input type="hidden" name="image_data" id="image_data">
+                </form>
+            </div>
         </div>
+    </section>
 
-        <!-- Option 2: Live Camera Capture Section -->
-        <div class="tab-section">
-            <label class="block text-sm font-semibold text-gray-700 mb-2"><strong>Or Capture Live Photo from Camera:</strong></label>
-            <button type="button" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md cursor-pointer" id="start-camera">
-                📷 Open Camera
-            </button>
-            
-            <video id="video" autoplay playsinline></video>
-            <button type="button" class="w-full mt-3 bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-4 rounded-xl transition duration-200 shadow-md cursor-pointer" id="click-photo" style="display:none;">
-                Capture & Analyze
-            </button>
-            <canvas id="canvas"></canvas>
-
-            <!-- Hidden form to submit captured image -->
-            <form id="camera-form" action="/predict_camera" method="POST" style="display: none;">
-                <input type="hidden" name="image_data" id="image_data">
-            </form>
+    <section class="features">
+        <div class="features-head">
+            <div class="eyebrow">What the system does</div>
+            <h2>Built around the way a herd actually gets managed</h2>
         </div>
+        <div class="feature-grid">
+            <div class="feature">
+                <div class="mark">Identify</div>
+                <h3>AI breed identification</h3>
+                <p>A model trained on native cattle and buffalo breeds reads a photo or live camera feed and returns the breed with a confidence score, ready to attach to a record.</p>
+            </div>
+            <div class="feature">
+                <div class="mark">Register</div>
+                <h3>Digital farmer portal</h3>
+                <p>Farmers register animals against a tag ID, review breed history at a glance, and keep every record for the herd in one searchable place.</p>
+            </div>
+            <div class="feature">
+                <div class="mark">Treat</div>
+                <h3>Veterinary care &amp; history</h3>
+                <p>Authorised doctors log medical visits, track vaccination schedules, and leave health notes tied to the same animal record the farmer sees.</p>
+            </div>
+        </div>
+    </section>
 
-    </div>
+    <footer>
+        © 2026 SIH25004 · Smart India Hackathon Project. All rights reserved.
+    </footer>
 
-    <!-- Camera Handling Script -->
     <script>
         const startCameraBtn = document.getElementById('start-camera');
         const video = document.getElementById('video');
@@ -110,7 +267,7 @@
                 clickPhotoBtn.style.display = 'block';
                 startCameraBtn.style.display = 'none';
             } catch (err) {
-                alert("Camera access denied or not available!");
+                alert("Camera access denied or device not supported!");
             }
         });
 
@@ -119,17 +276,15 @@
             canvas.height = video.videoHeight;
             const ctx = canvas.getContext('2d');
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
+
             const dataURL = canvas.toDataURL('image/jpeg');
             imageDataInput.value = dataURL;
 
-            // Stop camera stream
             let stream = video.srcObject;
-            if(stream) {
+            if (stream) {
                 stream.getTracks().forEach(track => track.stop());
             }
 
-            // Submit form
             cameraForm.submit();
         });
     </script>

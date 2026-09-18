@@ -1,25 +1,62 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration Confirmation</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f7f6; text-align: center; margin-top: 50px; }
-        .card { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; border-top: 5px solid #27ae60; }
-        .tag { font-size: 22px; font-weight: bold; color: #e67e22; background: #fef5e7; padding: 10px; border-radius: 5px; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Confirmation - SIH25004</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="card">
-        <h2 style="color: #27ae60;">🎉 Animal Registration Successful!</h2>
-        <p>Digital Livestock ID Generated:</p>
-        <div class="tag">{{ tag_id }}</div>
-        <p><strong>Owner Name:</strong> {{ owner_name }}</p>
-        <p><strong>Registered Breed:</strong> {{ breed }}</p>
-        <p>Status: <span style="color: #d35400;">Pending Verification</span></p>
-        <br>
-        <a href="/" style="color: #2980b9; text-decoration: none;">← Register Another Animal</a>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-emerald-50 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="bg-white/90 backdrop-blur-xl shadow-2xl rounded-3xl p-8 max-w-md w-full border border-white/20 text-center relative overflow-hidden">
+        
+        <!-- Top Success Accent Line -->
+        <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-emerald-500 to-green-600"></div>
+
+        <!-- Success Icon -->
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 text-emerald-600 rounded-3xl text-4xl mb-6 shadow-inner mx-auto">
+            🎉
+        </div>
+
+        <h2 class="text-2xl font-black text-gray-800 tracking-tight mb-2">
+            Animal Registration Successful!
+        </h2>
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-6">SIH25004 Digital Livestock System</p>
+
+        <!-- Digital ID Box -->
+        <div class="bg-amber-50 border border-amber-200/60 rounded-2xl p-4 mb-6 shadow-sm">
+            <span class="block text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">Digital Livestock ID Generated</span>
+            <div class="text-2xl font-black text-amber-700 tracking-wider font-mono">{{ tag_id }}</div>
+        </div>
+
+        <!-- Details List -->
+        <div class="bg-gray-50/80 rounded-2xl p-4 mb-6 text-left space-y-3 border border-gray-100 text-sm">
+            <div class="flex justify-between items-center border-b border-gray-200/60 pb-2">
+                <span class="text-gray-500 font-medium">Owner Name:</span>
+                <span class="font-bold text-gray-800">{{ owner_name }}</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-gray-200/60 pb-2">
+                <span class="text-gray-500 font-medium">Registered Breed:</span>
+                <span class="font-bold text-emerald-700">{{ breed }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-gray-500 font-medium">Status:</span>
+                <span class="bg-orange-100 text-orange-700 text-xs font-bold px-2.5 py-1 rounded-full">Pending Verification</span>
+            </div>
+        </div>
+
+        <!-- Back Button -->
+        <a href="/" class="w-full inline-block bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl transition duration-200 shadow-lg shadow-blue-600/20 text-sm tracking-wide">
+            ← Register Another Animal
+        </a>
+
     </div>
+
+    <!-- Footer -->
+    <div class="mt-8 text-center text-xs text-gray-400 font-medium">
+        SIH25004 Smart India Hackathon Project
+    </div>
+
 </body>
 </html>

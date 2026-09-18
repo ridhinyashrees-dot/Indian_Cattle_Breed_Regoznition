@@ -2,41 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Doctor Login - SIH2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinarian Login — SIH25004</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .login-card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #2c3e50; text-align: center; margin-bottom: 25px; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; color: #34495e; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .btn { background: #8e44ad; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-size: 16px; cursor: pointer; }
-        .btn:hover { background: #732d91; }
-        .back-link { text-align: center; margin-top: 15px; }
-        .back-link a { color: #27ae60; text-decoration: none; font-weight: bold; }
+        :root{
+            --clay:      #a3552f;
+            --clay-dark: #7c3f22;
+            --turmeric:  #c9932e;
+            --field:     #29423a;
+            --field-dark:#1b2e28;
+            --cream:     #f3ede0;
+            --paper:     #fbf8f1;
+            --ink:       #23201a;
+            --line:      #ddd3bd;
+            --muted:     #79715f;
+        }
+        *{ box-sizing:border-box; }
+        @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+
+        body{
+            margin:0; min-height:100vh; font-family:'Karla', -apple-system, sans-serif; color:var(--ink);
+            display:flex; align-items:center; justify-content:center; padding:24px;
+            background:
+              linear-gradient(120deg, rgba(27,46,40,.92) 0%, rgba(27,46,40,.8) 55%, rgba(27,46,40,.62) 100%),
+              url('https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1920&q=80');
+            background-size:cover;
+            background-position:center;
+        }
+        h1{ font-family:'Fraunces', Georgia, serif; margin:0; }
+
+        .back-top{
+            position:fixed; top:26px; left:26px;
+            display:inline-flex; align-items:center; gap:8px;
+            color:var(--cream); text-decoration:none; font-size:13px; font-weight:600;
+            background:rgba(0,0,0,.25); border:1px solid rgba(255,255,255,.25);
+            padding:8px 16px; border-radius:3px; backdrop-filter:blur(4px);
+            transition:border-color .15s, background .15s;
+        }
+        .back-top:hover{ border-color:var(--turmeric); background:rgba(0,0,0,.4); }
+
+        .panel{
+            max-width:420px; width:100%;
+            background:var(--paper); border-radius:4px; padding:38px 34px 32px;
+            box-shadow:0 26px 60px rgba(0,0,0,.4);
+            border-top:4px solid var(--turmeric);
+            position:relative; animation:fadeIn .4s ease-out forwards;
+        }
+
+        .badge{
+            width:54px; height:54px; border-radius:50%;
+            background:var(--field-dark); color:var(--turmeric);
+            display:flex; align-items:center; justify-content:center; font-size:24px;
+            margin:0 auto 18px;
+        }
+        .head{ text-align:center; margin-bottom:30px; }
+        .head .eyebrow{ font-size:11.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--clay); margin-bottom:8px; }
+        .head h1{ font-size:1.55rem; font-weight:600; color:var(--field-dark); }
+        .head p{ font-size:13px; color:var(--muted); margin-top:6px; }
+
+        .f-row{ margin-bottom:16px; }
+        .f-row label{ display:block; font-size:11.5px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--muted); margin-bottom:7px; }
+        .f-row input{
+            width:100%; border:1px solid var(--line); border-radius:3px; padding:12px 14px; font-size:14px;
+            background:var(--cream); color:var(--ink); font-family:'Karla', sans-serif;
+        }
+        .f-row input:focus{ outline:2px solid var(--clay); outline-offset:1px; background:var(--paper); }
+        .f-row input::placeholder{ color:#a39b87; }
+
+        .submit-btn{
+            width:100%; background:var(--field); color:var(--cream); border:0; border-radius:3px;
+            padding:14px; font-weight:700; font-size:13.5px; letter-spacing:.04em; text-transform:uppercase;
+            cursor:pointer; margin-top:6px; transition:transform .12s ease, box-shadow .12s ease, background .15s;
+        }
+        .submit-btn:hover{ background:var(--field-dark); transform:translateY(-1px); box-shadow:0 10px 22px rgba(41,66,58,.35); }
+
+        .divider-foot{ margin-top:22px; padding-top:18px; border-top:1px solid var(--line); text-align:center; }
+        .divider-foot a{
+            color:var(--clay-dark); text-decoration:none; font-weight:700; font-size:12px;
+            text-transform:uppercase; letter-spacing:.04em;
+        }
+        .divider-foot a:hover{ color:var(--clay); }
+
+        @media (prefers-reduced-motion: reduce){ .panel{ animation:none; } .submit-btn{ transition:none; } }
     </style>
 </head>
 <body>
-    <div class="login-card">
-        <h2>👨‍⚕️ Veterinarian Login</h2>
+
+    <a href="/" class="back-top">&larr; Back to Home</a>
+
+    <div class="panel">
+        <div class="badge">🩺</div>
+        <div class="head">
+            <div class="eyebrow">SIH25004 · Veterinary Access</div>
+            <h1>Veterinarian Portal</h1>
+            <p>Sign in to update medical records and vaccination notes</p>
+        </div>
+
         <form action="/doctor_login" method="POST">
-            <div class="form-group">
-                <label>Doctor Name:</label>
-                <input type="text" name="doctor_name" required placeholder="Enter your name">
+            <div class="f-row">
+                <label>Doctor Name</label>
+                <input type="text" name="doctor_name" required placeholder="Enter your full name">
             </div>
-            <div class="form-group">
-                <label>Phone Number:</label>
+
+            <div class="f-row">
+                <label>Phone Number</label>
                 <input type="text" name="doctor_phone" required placeholder="Enter mobile number">
             </div>
-            <div class="form-group">
-                <label>Password (Any password):</label>
-                <input type="password" name="password" required placeholder="Enter password">
+
+            <div class="f-row">
+                <label>Password</label>
+                <input type="password" name="password" required placeholder="Enter secure password">
             </div>
-            <button type="submit" class="btn">Login & Proceed</button>
+
+            <button type="submit" class="submit-btn">Login &amp; Proceed</button>
         </form>
-        <div class="back-link">
-            <a href="/">← Back to Home</a>
+
+        <div class="divider-foot">
+            <a href="/">&larr; Back to Home</a>
         </div>
     </div>
+
 </body>
 </html>

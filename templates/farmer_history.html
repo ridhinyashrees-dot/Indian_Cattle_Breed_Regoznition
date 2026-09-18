@@ -2,65 +2,203 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Farmer Dashboard - Registered Animals</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard — Registered Animals</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background: #eef2f3; margin: 30px; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #2c3e50; text-align: center; }
-        .search-box { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
-        .search-box input { padding: 10px; width: 250px; border: 1px solid #ccc; border-radius: 5px; }
-        .search-box button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .search-box button:hover { background: #2980b9; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
-        th { background-color: #34495e; color: white; }
-        .btn-history { background: #8e44ad; color: white; padding: 8px 12px; text-decoration: none; border-radius: 5px; font-size: 14px; }
-        .btn-history:hover { background: #732d91; }
-        .back-link { display: inline-block; margin-bottom: 15px; color: #3498db; text-decoration: none; font-weight: bold; }
+        :root{
+            --clay:      #a3552f;
+            --clay-dark: #7c3f22;
+            --turmeric:  #c9932e;
+            --field:     #29423a;
+            --field-dark:#1b2e28;
+            --cream:     #f3ede0;
+            --paper:     #fbf8f1;
+            --ink:       #23201a;
+            --line:      #ddd3bd;
+            --muted:     #79715f;
+        }
+        *{ box-sizing:border-box; }
+        @keyframes fadeIn{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:translateY(0); } }
+        body{
+            margin:0; min-height:100vh; color:var(--ink);
+            font-family:'Karla', -apple-system, sans-serif;
+            padding:36px 20px 60px; display:flex; flex-direction:column; align-items:center;
+            background:
+              linear-gradient(180deg, rgba(27,46,40,.92) 0%, rgba(27,46,40,.86) 260px, var(--cream) 260px),
+              url('https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1920&q=80');
+            background-size:cover; background-position:top center; background-attachment:fixed;
+            background-repeat:no-repeat;
+        }
+        h1,h3{ font-family:'Fraunces', Georgia, serif; margin:0; }
+        .wrap{ max-width:1040px; width:100%; animation:fadeIn .35s ease-out forwards; }
+
+        /* Top bar */
+        .topbar{
+            display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
+            padding:12px 4px; margin-bottom:22px;
+        }
+        .topbar a.back{
+            display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+            color:var(--cream); font-weight:600; font-size:13.5px;
+            background:rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.25);
+            padding:9px 16px; border-radius:3px; backdrop-filter:blur(4px);
+            transition:border-color .15s, background .15s;
+        }
+        .topbar a.back:hover{ border-color:var(--turmeric); background:rgba(0,0,0,.36); }
+        .topbar .badge{
+            font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+            background:rgba(0,0,0,.25); color:var(--turmeric); border:1px solid rgba(255,255,255,.2);
+            padding:7px 14px; border-radius:20px; backdrop-filter:blur(4px);
+        }
+
+        /* Card */
+        .card{
+            background:var(--paper); border:1px solid var(--line); border-radius:4px;
+            padding:36px; position:relative; overflow:hidden; box-shadow:0 24px 55px rgba(0,0,0,.28);
+        }
+        .card::before{ content:''; position:absolute; top:0; left:0; right:0; height:4px; background:linear-gradient(90deg, var(--clay), var(--turmeric), var(--field)); }
+
+        .head{ text-align:center; max-width:500px; margin:0 auto 30px; }
+        .head .badge-icon{
+            width:56px; height:56px; border-radius:50%; background:var(--field-dark); color:var(--turmeric);
+            display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 14px;
+        }
+        .head h1{ font-size:1.65rem; font-weight:600; color:var(--field-dark); }
+        .head p{ font-size:13.5px; color:var(--muted); margin-top:6px; }
+
+        /* Search box */
+        .search-box{ background:var(--cream); border:1px solid var(--line); border-radius:3px; padding:24px; max-width:520px; margin:0 auto 32px; }
+        .search-box label{ display:block; font-size:11.5px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:var(--clay); margin-bottom:12px; text-align:center; }
+        .search-row{ display:flex; gap:10px; flex-wrap:wrap; }
+        .search-row input{
+            flex:1 1 200px; border:1px solid var(--line); border-radius:3px; padding:12px 14px;
+            font-size:14px; background:var(--paper); color:var(--ink);
+        }
+        .search-row input:focus{ outline:2px solid var(--clay); outline-offset:1px; }
+        .search-row button{
+            background:var(--clay); color:var(--paper); border:0; border-radius:3px;
+            padding:12px 22px; font-weight:700; font-size:13px; letter-spacing:.03em; text-transform:uppercase;
+            cursor:pointer; white-space:nowrap; transition:background .15s, transform .12s;
+        }
+        .search-row button:hover{ background:var(--clay-dark); transform:translateY(-1px); }
+
+        /* Results header */
+        .results-head{ display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:20px; flex-wrap:wrap; gap:8px; }
+        .results-head h3{ font-size:15px; font-weight:600; color:var(--field-dark); font-family:'Karla',sans-serif; }
+        .results-head .num{ font-family:'Fraunces',serif; font-weight:600; color:var(--clay); }
+
+        /* Table */
+        .table-wrap{ overflow-x:auto; border:1px solid var(--line); border-radius:3px; }
+        table.animals{ width:100%; border-collapse:collapse; font-size:13.5px; }
+        table.animals thead tr{ background:var(--field-dark); color:var(--cream); text-transform:uppercase; font-size:11px; letter-spacing:.04em; }
+        table.animals th{ padding:13px 16px; text-align:left; font-weight:700; }
+        table.animals th.center, table.animals td.center{ text-align:center; }
+        table.animals tbody tr{ border-top:1px solid var(--line); background:var(--paper); }
+        table.animals tbody tr:hover{ background:var(--cream); }
+        table.animals td{ padding:13px 16px; }
+        .tag-chip{
+            font-family:monospace; font-size:12px; font-weight:700; color:var(--clay-dark);
+            background:#f1e2d3; border:1px solid #e0c6a9; padding:4px 10px; border-radius:20px;
+        }
+        .breed-cell{ font-weight:700; color:var(--field); }
+        .conf-chip{
+            font-size:12px; font-weight:700; color:var(--field);
+            background:#e6ece6; border:1px solid #c9d8c8; padding:4px 12px; border-radius:20px;
+        }
+        .view-btn{
+            display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+            background:var(--field); color:var(--cream); font-weight:700; font-size:12px;
+            padding:8px 14px; border-radius:3px; transition:background .15s;
+        }
+        .view-btn:hover{ background:var(--field-dark); }
+
+        .empty-note{
+            border:1px dashed var(--line); border-radius:3px; padding:40px; text-align:center;
+            color:var(--muted); font-size:13.5px;
+        }
+        .empty-note span{ display:block; font-size:26px; margin-bottom:10px; }
+
+        .page-footer{ margin-top:24px; text-align:center; font-size:12px; color:var(--muted); }
+
+        @media (prefers-reduced-motion: reduce){ .wrap{ animation:none; } .search-row button, .view-btn{ transition:none; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="/" class="back-link">&larr; Back to Home</a>
-        <h2>🌾 Farmer Dashboard - My Registered Animals</h2>
-        
-        <div class="search-box">
-            <form action="/farmer_history" method="POST">
-                <label><strong>Enter Your Mobile Number:</strong> </label>
-                <input type="text" name="mobile_number" value="{{ mobile_number or '' }}" required placeholder="Mobile Number">
-                <button type="submit">View My Animals</button>
-            </form>
+
+    <div class="wrap">
+
+        <div class="topbar">
+            <a href="/" class="back">&larr; Back to Home</a>
+            <span class="badge">🌾 Farmer Portal Dashboard</span>
         </div>
 
-        {% if mobile_number %}
-            <h3>Animals Registered Under: {{ mobile_number }}</h3>
-            {% if registered_animals %}
-            <table>
-                <tr>
-                    <th>Tag ID</th>
-                    <th>Owner Name</th>
-                    <th>Village</th>
-                    <th>Predicted Breed</th>
-                    <th>Confidence</th>
-                    <th>Action</th>
-                </tr>
-                {% for animal in registered_animals %}
-                <tr>
-                    <td><strong>{{ animal.registration_tag }}</strong></td>
-                    <td>{{ animal.owner_name }}</td>
-                    <td>{{ animal.village }}</td>
-                    <td style="color: #27ae60; font-weight: bold;">{{ animal.predicted_breed }}</td>
-                    <td>{{ animal.prediction_confidence }}%</td>
-                    <td>
-                        <a href="/breed_medical_history/{{ animal.predicted_breed }}" class="btn-history">📋 View Medical History</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-            {% else %}
-            <p style="text-align: center; color: #666; font-style: italic;">No animals found registered with this mobile number.</p>
+        <div class="card">
+
+            <div class="head">
+                <div class="badge-icon">🐄</div>
+                <h1>My Registered Animals</h1>
+                <p>Search and manage your livestock records and medical history</p>
+            </div>
+
+            <div class="search-box">
+                <form action="/farmer_history" method="POST">
+                    <label>Enter your mobile number</label>
+                    <div class="search-row">
+                        <input type="text" name="mobile_number" value="{{ mobile_number or '' }}" required placeholder="e.g. 9876543210">
+                        <button type="submit">View Animals</button>
+                    </div>
+                </form>
+            </div>
+
+            {% if mobile_number %}
+                <div class="results-head">
+                    <h3>Animals registered under: <span class="num">{{ mobile_number }}</span></h3>
+                </div>
+
+                {% if registered_animals %}
+                <div class="table-wrap">
+                    <table class="animals">
+                        <thead>
+                            <tr>
+                                <th>Tag ID</th>
+                                <th>Owner Name</th>
+                                <th>Village</th>
+                                <th>Predicted Breed</th>
+                                <th class="center">Confidence</th>
+                                <th class="center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for animal in registered_animals %}
+                            <tr>
+                                <td><span class="tag-chip">{{ animal.registration_tag }}</span></td>
+                                <td>{{ animal.owner_name }}</td>
+                                <td>{{ animal.village }}</td>
+                                <td class="breed-cell">{{ animal.predicted_breed }}</td>
+                                <td class="center"><span class="conf-chip">{{ animal.prediction_confidence }}%</span></td>
+                                <td class="center">
+                                    <a href="/breed_medical_history/{{ animal.predicted_breed }}" class="view-btn">📋 Medical History</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-note">
+                    <span>🔍</span>
+                    No animals found registered with this mobile number.
+                </div>
+                {% endif %}
             {% endif %}
-        {% endif %}
+
+        </div>
+
+        <div class="page-footer">SIH25004 Smart India Hackathon Project · Farmer Portal</div>
     </div>
+
 </body>
 </html>
